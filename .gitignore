@@ -113,3 +113,4 @@ create_temp_icon.sh
 fix_icon.sh
 GITHUB_SETUP.md
 releases/RELEASE_NOTES_*.md
+dmg-design/
