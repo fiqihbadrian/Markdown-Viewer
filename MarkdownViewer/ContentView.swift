@@ -5,6 +5,8 @@ struct ContentView: View {
     @State private var markdownContent: String = "# Welcome to Markdown Viewer\n\nDouble-click any `.md` file to open it here.\n\nOr use **⌘O** to open a file.\n\n---\n\n## Set as Default App\n\nTo make MarkdownViewer your default app for .md files:\n\n1. Go to menu: **MarkdownViewer → Set as Default App for .md Files**\n2. Or right-click any .md file → Get Info (⌘I)\n3. Under 'Open with:', choose MarkdownViewer\n4. Click 'Change All...'"
     @State private var currentFileURL: URL?
     @State private var showingDefaultAppInfo = false
+    @State private var isEditMode = false
+    @State private var editableContent: String = ""
     
     var body: some View {
         VStack(spacing: 0) {
@@ -16,6 +18,37 @@ struct ContentView: View {
                     Text(url.lastPathComponent)
                         .font(.headline)
                     Spacer()
+                    
+                    // Edit/Preview toggle button
+                    Button(action: toggleEditMode) {
+                        HStack(spacing: 4) {
+                            Image(systemName: isEditMode ? "eye" : "pencil")
+                            Text(isEditMode ? "Preview" : "Edit")
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .help(isEditMode ? "Switch to preview mode" : "Edit markdown source")
+                    
+                    Divider()
+                        .frame(height: 20)
+                        .padding(.horizontal, 8)
+                    
+                    // Save button (only in edit mode)
+                    if isEditMode {
+                        Button(action: saveFile) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "square.and.arrow.down")
+                                Text("Save")
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .help("Save changes (⌘S)")
+                        
+                        Divider()
+                            .frame(height: 20)
+                            .padding(.horizontal, 8)
+                    }
+                    
                     Button(action: reloadFile) {
                         Image(systemName: "arrow.clockwise")
                     }
@@ -43,8 +76,12 @@ struct ContentView: View {
                 Divider()
             }
             
-            // Markdown preview
-            MarkdownWebView(markdownContent: markdownContent)
+            // Content area - either editor or preview
+            if isEditMode {
+                MarkdownEditor(text: $editableContent)
+            } else {
+                MarkdownWebView(markdownContent: markdownContent)
+            }
         }
         .frame(minWidth: 600, minHeight: 400)
         .onReceive(NotificationCenter.default.publisher(for: .openMarkdownFile)) { notification in
@@ -61,15 +98,54 @@ struct ContentView: View {
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
             markdownContent = content
+            editableContent = content
             currentFileURL = url
+            isEditMode = false // Always start in preview mode
         } catch {
             markdownContent = "# Error\n\nCould not load file: \(error.localizedDescription)"
+            editableContent = markdownContent
         }
     }
     
     func reloadFile() {
         if let url = currentFileURL {
             loadMarkdownFile(url: url)
+        }
+    }
+    
+    func toggleEditMode() {
+        isEditMode.toggle()
+        if isEditMode {
+            // Switching to edit mode - sync content
+            editableContent = markdownContent
+        } else {
+            // Switching to preview mode - update preview with edited content
+            markdownContent = editableContent
+        }
+    }
+    
+    func saveFile() {
+        guard let url = currentFileURL else { return }
+        
+        do {
+            try editableContent.write(to: url, atomically: true, encoding: .utf8)
+            markdownContent = editableContent
+            
+            // Show success feedback
+            let alert = NSAlert()
+            alert.messageText = "File Saved"
+            alert.informativeText = "Your changes have been saved successfully."
+            alert.alertStyle = .informational
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        } catch {
+            // Show error
+            let alert = NSAlert()
+            alert.messageText = "Save Failed"
+            alert.informativeText = "Could not save file: \(error.localizedDescription)"
+            alert.alertStyle = .critical
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
         }
     }
 }
@@ -89,7 +165,7 @@ struct MarkdownWebView: NSViewRepresentable {
     }
     
     func convertMarkdownToHTML(_ markdown: String) -> String {
-        var lines = markdown.components(separatedBy: "\n")
+        let lines = markdown.components(separatedBy: "\n")
         var html = ""
         var inCodeBlock = false
         var codeBlockContent = ""
@@ -436,6 +512,55 @@ struct InstructionStep: View {
                 .font(.body)
             
             Spacer()
+        }
+    }
+}
+
+// Markdown Editor Component
+struct MarkdownEditor: NSViewRepresentable {
+    @Binding var text: String
+    
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSTextView.scrollableTextView()
+        let textView = scrollView.documentView as! NSTextView
+        
+        textView.delegate = context.coordinator
+        textView.isEditable = true
+        textView.isSelectable = true
+        textView.allowsUndo = true
+        textView.font = NSFont.monospacedSystemFont(ofSize: 14, weight: .regular)
+        textView.textColor = NSColor.labelColor
+        textView.backgroundColor = NSColor.textBackgroundColor
+        textView.isAutomaticQuoteSubstitutionEnabled = false
+        textView.isAutomaticDashSubstitutionEnabled = false
+        textView.isAutomaticTextReplacementEnabled = false
+        textView.isAutomaticSpellingCorrectionEnabled = false
+        textView.textContainerInset = NSSize(width: 10, height: 10)
+        
+        return scrollView
+    }
+    
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        let textView = scrollView.documentView as! NSTextView
+        if textView.string != text {
+            textView.string = text
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, NSTextViewDelegate {
+        var parent: MarkdownEditor
+        
+        init(_ parent: MarkdownEditor) {
+            self.parent = parent
+        }
+        
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            parent.text = textView.string
         }
     }
 }

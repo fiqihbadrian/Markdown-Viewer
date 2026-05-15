@@ -12,8 +12,10 @@ A lightweight, fast, and beautiful Markdown viewer for macOS. View your `.md` fi
 - ⚡ **Fast** - Native Swift + WebKit rendering
 - 🎨 **GitHub-style Markdown** - Beautiful rendering with proper formatting
 - 🌓 **Auto Dark Mode** - Automatically adapts to your system theme
+- ✏️ **Edit Mode** - Edit markdown source code with live preview
+- 💾 **Save Changes** - Save your edits directly from the app
 - 🔄 **Live Reload** - Refresh button to update file changes
-- ⌨️ **Keyboard Shortcuts** - Quick file opening with ⌘O
+- ⌨️ **Keyboard Shortcuts** - Quick file opening with ⌘O, save with ⌘S
 - 📝 **Full Markdown Support** - Headers, lists, code blocks, links, and more
 - 🎯 **File Association** - Set as default app for `.md` files
 
@@ -37,9 +39,12 @@ A lightweight, fast, and beautiful Markdown viewer for macOS. View your `.md` fi
 ### Download
 
 1. Go to [Releases](https://github.com/fiqihbadrian/Markdown-Viewer/releases)
-2. Download the latest `MarkdownViewer.app.zip`
-3. Unzip and move `MarkdownViewer.app` to your `/Applications` folder
-4. Right-click the app and select "Open" (first time only, due to macOS Gatekeeper)
+2. Download the latest `MarkdownViewer-v1.0.0-macOS.dmg`
+3. Open the DMG file
+4. Drag `MarkdownViewer.app` to the `Applications` folder
+5. Eject the DMG
+6. Open MarkdownViewer from your Applications folder
+7. Right-click the app and select "Open" (first time only, due to macOS Gatekeeper)
 
 ### Build from Source
 
@@ -73,6 +78,20 @@ The built app will be in `~/Library/Developer/Xcode/DerivedData/MarkdownViewer-*
 - Press `⌘O` or use File → Open
 - Select your markdown file
 
+### Editing Markdown Files
+
+**Preview Mode (Default)**
+- Files open in preview mode by default
+- Beautiful GitHub-style rendering
+- Click **"Edit"** button to switch to edit mode
+
+**Edit Mode**
+- Click the **"Edit"** button in the toolbar
+- Edit markdown source code with monospace font
+- Press `⌘S` or click **"Save"** to save changes
+- Click **"Preview"** to see rendered output
+- Changes are saved to the original file
+
 ### Setting as Default App
 
 **Option 1: Via App Menu**
@@ -98,6 +117,7 @@ The built app will be in `~/Library/Developer/Xcode/DerivedData/MarkdownViewer-*
 ### Keyboard Shortcuts
 
 - `⌘O` - Open file
+- `⌘S` - Save file (in edit mode)
 - `⌘R` - Reload current file (refresh)
 - `⌘W` - Close window
 - `⌘Q` - Quit app
