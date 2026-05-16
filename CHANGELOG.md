@@ -2,7 +2,7 @@
 
 All notable changes to MarkdownViewer will be documented in this file.
 
-## [1.1.0] - 2026-05-16
+## [1.2.0] - 2026-05-16
 
 ### Added
 - **PNG Export Feature** 🎉
@@ -41,6 +41,8 @@ All notable changes to MarkdownViewer will be documented in this file.
   - Added UPDATE_NOTES.md
   - Added HOW_TO_TEST.md
   - Updated README.md with PNG export info
+  - Added CHANGELOG.md
+  - Added RELEASE_NOTES_v1.2.0.md
 
 ### Technical
 - Implemented WKWebView-based rendering
@@ -76,7 +78,7 @@ All notable changes to MarkdownViewer will be documented in this file.
 
 ## Version Comparison
 
-| Feature | v1.0.0 | v1.1.0 |
+| Feature | v1.0.0 | v1.2.0 |
 |---------|--------|--------|
 | Markdown Preview | ✅ | ✅ |
 | Edit Mode | ✅ | ✅ |
@@ -116,7 +118,7 @@ All notable changes to MarkdownViewer will be documented in this file.
 
 ## Download
 
-Latest version: **v1.1.0**
+Latest version: **v1.2.0**
 - [Download from GitHub Releases](https://github.com/fiqihbadrian/Markdown-Viewer/releases)
 
 ## Feedback
