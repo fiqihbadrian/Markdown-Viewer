@@ -16,7 +16,10 @@ A lightweight, fast, and beautiful Markdown viewer for macOS. View your `.md` fi
 - 💾 **Save Changes** - Save your edits directly from the app
 - 🔄 **Live Reload** - Refresh button to update file changes
 - ⌨️ **Keyboard Shortcuts** - Quick file opening with ⌘O, save with ⌘S
-- 📝 **Full Markdown Support** - Headers, lists, code blocks, links, and more
+- 📝 **Full Markdown Support** - Headers, lists, tables, code blocks, links, and more
+- 🎨 **5 Preview Themes** - System, GitHub Light/Dark, Light, Dark
+- 📄 **Export to PDF** - Export your markdown as PDF with styling
+- 🖼️ **Export to PNG** - Export as high-quality PNG image with full styling
 - 🎯 **File Association** - Set as default app for `.md` files
 
 ## 📸 Screenshots
@@ -27,11 +30,12 @@ A lightweight, fast, and beautiful Markdown viewer for macOS. View your `.md` fi
 
 - ✅ Headers (H1-H6)
 - ✅ Bold, italic, strikethrough
-- ✅ Inline code and code blocks with syntax highlighting
+- ✅ Inline code and code blocks
 - ✅ Unordered and ordered lists
 - ✅ Links
 - ✅ Blockquotes
 - ✅ Horizontal rules
+- ✅ Tables with borders
 - ✅ Proper paragraph spacing
 
 ## 📦 Installation
@@ -114,6 +118,38 @@ The built app will be in `~/Library/Developer/Xcode/DerivedData/MarkdownViewer-*
 2. Click the **"How?"** button in the top banner
 3. Follow the step-by-step instructions in the popup
 
+### Preview Themes
+
+Choose from 5 beautiful themes:
+1. **System Default** - Adapts to your macOS appearance (light/dark)
+2. **GitHub Light** - Classic GitHub light theme
+3. **GitHub Dark** - GitHub's dark theme
+4. **Light** - Clean light theme with high contrast
+5. **Dark** - Modern dark theme
+
+Change theme using the paintbrush icon in the toolbar.
+
+### Export Features
+
+**Export to PDF**
+- Click the **"PDF"** button in the toolbar
+- Exports with basic styling
+- Perfect for printing and sharing
+- Small file size
+- Text remains selectable
+
+**Export to PNG** ✨ NEW
+- Click the **"PNG"** button in the toolbar
+- Full styling support:
+  - ✅ Table borders and styling
+  - ✅ Code block backgrounds
+  - ✅ Horizontal rules
+  - ✅ All theme colors
+  - ✅ Proper margins and padding
+- High-quality image (1200px width)
+- Perfect for web sharing and presentations
+- Auto-adjusts height to content
+
 ### Keyboard Shortcuts
 
 - `⌘O` - Open file
@@ -154,17 +190,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🐛 Known Issues
 
 - Nested lists are not fully supported yet
-- Tables are not rendered
 - Images in markdown are not displayed
+- PDF export has limited CSS support (use PNG for full styling)
 
 ## 🗺️ Roadmap
 
-- [ ] Add support for tables
+- [x] Add support for tables
+- [x] Add export to PDF
+- [x] Add export to PNG
+- [x] Add multiple themes (5 themes)
 - [ ] Add support for images
 - [ ] Add support for nested lists
-- [ ] Add export to PDF/HTML
-- [ ] Add custom themes
+- [ ] Add export to HTML
+- [ ] Add custom themes (user-defined)
 - [ ] Add syntax highlighting for code blocks
+- [ ] Add configurable PNG export (width, DPI)
+- [ ] Add batch export multiple files
 
 ## 💬 Support
 
