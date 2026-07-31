@@ -224,3 +224,5 @@ If you encounter any issues or have questions:
 **Made with ❤️ by [Fiqih Badrian](https://github.com/fiqihbadrian)**
 
 ⭐ Star this repo if you find it useful!
+
+<img width="921" height="555" alt="image" src="https://github.com/user-attachments/assets/36f21a55-2be3-4fcf-b740-81e513a2e17d" />
