@@ -415,6 +415,7 @@ class MarkdownConverter {
         var inCodeBlock = false
         var codeBlockContent = ""
         var inList = false
+        var listTag = "ul"
         var inTable = false
         var tableRows: [String] = []
         
@@ -423,6 +424,7 @@ class MarkdownConverter {
             
             if line.hasPrefix("```") {
                 if inTable { html += processTable(tableRows); tableRows = []; inTable = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 if inCodeBlock {
                     html += "<pre><code>\(escapeHTML(codeBlockContent))</code></pre>"
                     codeBlockContent = ""
@@ -439,6 +441,7 @@ class MarkdownConverter {
             }
             
             if line.contains("|") && !line.trimmingCharacters(in: .whitespaces).isEmpty {
+                if inList { html += "</\(listTag)>"; inList = false }
                 if !inTable {
                     inTable = true
                 }
@@ -454,7 +457,7 @@ class MarkdownConverter {
             
             if line.trimmingCharacters(in: .whitespaces).isEmpty {
                 if inList {
-                    html += "</ul>"
+                    html += "</\(listTag)>"
                     inList = false
                 }
                 html += "<p></p>"
@@ -462,45 +465,49 @@ class MarkdownConverter {
             }
             
             if line.hasPrefix("# ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(2))
                 html += "<h1>\(processInlineMarkdown(line))</h1>"
             } else if line.hasPrefix("## ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(3))
                 html += "<h2>\(processInlineMarkdown(line))</h2>"
             } else if line.hasPrefix("### ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(4))
                 html += "<h3>\(processInlineMarkdown(line))</h3>"
             } else if line.hasPrefix("#### ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(5))
                 html += "<h4>\(processInlineMarkdown(line))</h4>"
             } else if line.hasPrefix("##### ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(6))
                 html += "<h5>\(processInlineMarkdown(line))</h5>"
             } else if line.hasPrefix("###### ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(7))
                 html += "<h6>\(processInlineMarkdown(line))</h6>"
             }
             else if line.hasPrefix("---") || line.hasPrefix("***") || line.hasPrefix("___") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 html += "<hr>"
             }
             else if line.hasPrefix("- ") || line.hasPrefix("* ") || line.hasPrefix("+ ") {
-                if !inList {
+                if !inList || listTag != "ul" {
+                    if inList { html += "</\(listTag)>" }
                     html += "<ul>"
+                    listTag = "ul"
                     inList = true
                 }
                 line = String(line.dropFirst(2))
                 html += "<li>\(processInlineMarkdown(line))</li>"
             }
             else if line.range(of: #"^\d+\.\s"#, options: .regularExpression) != nil {
-                if !inList {
+                if !inList || listTag != "ol" {
+                    if inList { html += "</\(listTag)>" }
                     html += "<ol>"
+                    listTag = "ol"
                     inList = true
                 }
                 if let match = line.range(of: #"^\d+\.\s"#, options: .regularExpression) {
@@ -509,18 +516,18 @@ class MarkdownConverter {
                 html += "<li>\(processInlineMarkdown(line))</li>"
             }
             else if line.hasPrefix("> ") {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 line = String(line.dropFirst(2))
                 html += "<blockquote>\(processInlineMarkdown(line))</blockquote>"
             }
             else {
-                if inList { html += "</ul>"; inList = false }
+                if inList { html += "</\(listTag)>"; inList = false }
                 html += "<p>\(processInlineMarkdown(line))</p>"
             }
         }
         
         if inList {
-            html += "</ul>"
+            html += "</\(listTag)>"
         }
         
         if inTable {
