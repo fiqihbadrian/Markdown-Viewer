@@ -43,7 +43,12 @@
     source = content;
     fileName.textContent = name;
     document.title = `${name} - MarkdownViewer`;
-    setEditing(false);
+    editing = false;
+    editor.hidden = true;
+    preview.hidden = false;
+    btnSave.hidden = true;
+    themeSel.disabled = false;
+    btnEdit.textContent = 'Edit';
     render(source);
   }
 

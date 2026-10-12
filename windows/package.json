@@ -39,7 +39,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "differentialPackage": false
     },
     "fileAssociations": [
       {
@@ -48,6 +49,11 @@
         "description": "Markdown file",
         "role": "Viewer"
       }
-    ]
+    ],
+    "electronLanguages": [
+      "en-US",
+      "id"
+    ],
+    "compression": "maximum"
   }
 }
