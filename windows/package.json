@@ -40,7 +40,21 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "differentialPackage": false
+      "perMachine": false,
+      "language": "1057",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/uninstallerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "license": "build/LICENSE.txt",
+      "include": "build/installer.nsh",
+      "shortcutName": "MarkdownViewer",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
     },
     "fileAssociations": [
       {
@@ -54,6 +68,9 @@
       "en-US",
       "id"
     ],
-    "compression": "maximum"
+    "compression": "maximum",
+    "directories": {
+      "buildResources": "build"
+    }
   }
 }
