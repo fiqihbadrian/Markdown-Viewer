@@ -1,0 +1,53 @@
+{
+  "name": "markdown-viewer",
+  "version": "1.2.1",
+  "description": "Markdown Viewer untuk Windows",
+  "author": "Fiqih Badrian",
+  "license": "MIT",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --x64"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.0",
+    "marked": "^18.1.0"
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.fiqihbadrian.markdownviewer",
+    "productName": "MarkdownViewer",
+    "files": [
+      "src/**/*",
+      "node_modules/marked/lib/marked.umd.js",
+      "node_modules/dompurify/dist/purify.min.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "fileAssociations": [
+      {
+        "ext": "md",
+        "name": "Markdown",
+        "description": "Markdown file",
+        "role": "Viewer"
+      }
+    ]
+  }
+}

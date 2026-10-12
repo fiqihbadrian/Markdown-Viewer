@@ -1,0 +1,90 @@
+:root {
+  --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --border: #d0d7de;
+  --code-bg: #f6f8fa; --link: #0969da; --row-alt: #f6f8fa; --toolbar: #f6f8fa;
+}
+body[data-theme="dark"] {
+  --bg: #1e1e1e; --fg: #d4d4d4; --muted: #a0a0a0; --border: #404040;
+  --code-bg: #2d2d2d; --link: #4fc3f7; --row-alt: #252525; --toolbar: #252525;
+}
+body[data-theme="github-dark"] {
+  --bg: #0d1117; --fg: #c9d1d9; --muted: #8b949e; --border: #30363d;
+  --code-bg: #161b22; --link: #58a6ff; --row-alt: #161b22; --toolbar: #161b22;
+}
+body[data-theme="github-light"] {
+  --bg: #ffffff; --fg: #24292f; --muted: #57606a; --border: #d0d7de;
+  --code-bg: #f6f8fa; --link: #0969da; --row-alt: #f6f8fa; --toolbar: #f6f8fa;
+}
+@media (prefers-color-scheme: dark) {
+  body[data-theme="system"] {
+    --bg: #1e1e1e; --fg: #d4d4d4; --muted: #a0a0a0; --border: #404040;
+    --code-bg: #2d2d2d; --link: #0A84FF; --row-alt: #252525; --toolbar: #252525;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  display: flex; flex-direction: column;
+}
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--toolbar);
+  flex-wrap: wrap;
+}
+.title { display: flex; align-items: center; gap: 8px; font-weight: 600; min-width: 0; }
+#fileName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+button, select {
+  font: inherit; color: var(--fg); background: transparent;
+  border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer;
+}
+button:hover, select:hover { background: rgba(127, 127, 127, 0.12); }
+main { flex: 1; overflow: auto; min-height: 0; }
+
+.markdown-body {
+  max-width: 900px; margin: 0 auto; padding: 30px;
+  line-height: 1.6; font-size: 16px;
+}
+.markdown-body[hidden] { display: none; }
+.markdown-body > :first-child { margin-top: 0; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+  margin: 24px 0 16px; font-weight: 600; line-height: 1.25;
+}
+.markdown-body h1 { font-size: 2em; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
+.markdown-body h2 { font-size: 1.5em; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
+.markdown-body h3 { font-size: 1.25em; }
+.markdown-body p { margin: 0 0 16px; }
+.markdown-body a { color: var(--link); text-decoration: none; }
+.markdown-body a:hover { text-decoration: underline; }
+.markdown-body ul, .markdown-body ol { margin: 0 0 16px; padding-left: 2em; }
+.markdown-body li { margin-top: .25em; }
+.markdown-body blockquote {
+  margin: 0 0 16px; padding: 0 1em; color: var(--muted);
+  border-left: .25em solid var(--border);
+}
+.markdown-body hr { height: .25em; margin: 24px 0; background: var(--border); border: 0; }
+.markdown-body code {
+  padding: .2em .4em; border-radius: 6px; background: var(--code-bg);
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 85%;
+}
+.markdown-body pre {
+  padding: 16px; margin: 0 0 16px; overflow: auto; border-radius: 6px;
+  background: var(--code-bg); border: 1px solid var(--border);
+}
+.markdown-body pre code { padding: 0; background: none; font-size: 85%; }
+.markdown-body table {
+  display: block; width: max-content; max-width: 100%; overflow: auto;
+  border-collapse: collapse; margin: 0 0 16px;
+}
+.markdown-body th, .markdown-body td { padding: 6px 13px; border: 1px solid var(--border); }
+.markdown-body th { font-weight: 600; background: var(--code-bg); }
+.markdown-body tr:nth-child(2n) td { background: var(--row-alt); }
+
+#editor {
+  display: block; width: 100%; height: 100%; margin: 0; padding: 14px;
+  border: 0; outline: none; resize: none; background: var(--bg); color: var(--fg);
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 14px; line-height: 1.5;
+}

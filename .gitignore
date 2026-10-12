@@ -114,3 +114,8 @@ fix_icon.sh
 GITHUB_SETUP.md
 releases/RELEASE_NOTES_*.md
 dmg-design/
+
+# Windows (Electron)
+windows/node_modules/
+windows/dist/
+!windows/build/
