@@ -1,0 +1,22 @@
+@media print {
+  .toolbar { display: none !important; }
+  main { overflow: visible; }
+  #editor { display: none !important; }
+  .markdown-body {
+    max-width: none;
+    padding: 0;
+    background: #ffffff;
+    color: #1f2328;
+  }
+  .markdown-body pre,
+  .markdown-body code,
+  .markdown-body th {
+    background: #f6f8fa !important;
+    color: #1f2328 !important;
+  }
+  .markdown-body td { background: #ffffff !important; }
+  .markdown-body tr:nth-child(2n) td { background: #f6f8fa !important; }
+  .markdown-body a { color: #0969da !important; }
+  .markdown-body pre { border: 1px solid #d0d7de; white-space: pre-wrap; }
+  .markdown-body table { display: table; width: 100%; }
+}

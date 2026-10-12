@@ -2,9 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: file:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;">
   <title>MarkdownViewer</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="print.css">
 </head>
 <body data-theme="system">
   <header class="toolbar">
@@ -31,8 +32,9 @@
     <article id="preview" class="markdown-body"></article>
     <textarea id="editor" spellcheck="false" hidden></textarea>
   </main>
-  <script src="../node_modules/marked/lib/marked.umd.js"></script>
-  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="vendor/marked.umd.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script src="vendor/html-to-image.js"></script>
   <script src="renderer.js"></script>
 </body>
 </html>

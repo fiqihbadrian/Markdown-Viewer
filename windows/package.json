@@ -1,76 +1,16 @@
 {
   "name": "markdown-viewer",
   "version": "1.2.1",
-  "description": "Markdown Viewer untuk Windows",
+  "description": "MarkdownViewer untuk Windows dan Linux",
   "author": "Fiqih Badrian",
   "license": "MIT",
-  "main": "src/main.js",
+  "private": true,
   "scripts": {
-    "start": "electron .",
-    "dist": "electron-builder --win --x64"
-  },
-  "dependencies": {
-    "dompurify": "^3.4.0",
-    "marked": "^18.1.0"
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
   },
   "devDependencies": {
-    "electron": "^44.7.0",
-    "electron-builder": "^26.15.3"
-  },
-  "build": {
-    "appId": "com.fiqihbadrian.markdownviewer",
-    "productName": "MarkdownViewer",
-    "files": [
-      "src/**/*",
-      "node_modules/marked/lib/marked.umd.js",
-      "node_modules/dompurify/dist/purify.min.js",
-      "package.json"
-    ],
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "icon": "build/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "perMachine": false,
-      "language": "1057",
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico",
-      "installerHeaderIcon": "build/icon.ico",
-      "installerSidebar": "build/installerSidebar.bmp",
-      "uninstallerSidebar": "build/uninstallerSidebar.bmp",
-      "installerHeader": "build/installerHeader.bmp",
-      "license": "build/LICENSE.txt",
-      "include": "build/installer.nsh",
-      "shortcutName": "MarkdownViewer",
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "deleteAppDataOnUninstall": false,
-      "runAfterFinish": true
-    },
-    "fileAssociations": [
-      {
-        "ext": "md",
-        "name": "Markdown",
-        "description": "Markdown file",
-        "role": "Viewer"
-      }
-    ],
-    "electronLanguages": [
-      "en-US",
-      "id"
-    ],
-    "compression": "maximum",
-    "directories": {
-      "buildResources": "build"
-    }
+    "@tauri-apps/cli": "^2.12.2"
   }
 }

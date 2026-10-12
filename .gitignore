@@ -115,7 +115,9 @@ GITHUB_SETUP.md
 releases/RELEASE_NOTES_*.md
 dmg-design/
 
-# Windows (Electron)
+# Windows / Linux (Tauri)
 windows/node_modules/
 windows/dist/
+windows/src-tauri/target/
+windows/src-tauri/gen/schemas/
 !windows/build/
