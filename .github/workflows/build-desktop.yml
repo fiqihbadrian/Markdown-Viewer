@@ -58,7 +58,17 @@ jobs:
           releaseName: ${{ github.ref_type == 'tag' && format('MarkdownViewer {0}', github.ref_name) || '' }}
           releaseDraft: false
           prerelease: false
-          # Saat dijalankan manual (workflow_dispatch) tidak ada tagName, jadi
-          # bundel diunggah sebagai artifact supaya bisa ditempel ke release.
-          uploadWorkflowArtifacts: ${{ github.ref_type != 'tag' }}
           args: ${{ matrix.args }}
+
+      # Saat dijalankan manual tidak ada tagName, jadi bundel diambil sebagai
+      # artifact untuk ditempel ke release yang sudah ada.
+      - name: Upload bundles as artifact
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundles-${{ matrix.platform }}
+          if-no-files-found: error
+          path: |
+            windows/src-tauri/target/release/bundle/deb/*.deb
+            windows/src-tauri/target/release/bundle/appimage/*.AppImage
+            windows/src-tauri/target/release/bundle/nsis/*.exe
