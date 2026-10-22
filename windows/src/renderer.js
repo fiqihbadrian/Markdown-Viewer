@@ -9,6 +9,9 @@ const btnEdit = document.getElementById('btnEdit');
 const btnSave = document.getElementById('btnSave');
 const themeSel = document.getElementById('theme');
 
+const EMPTY_STATE = preview.innerHTML;
+const MARKDOWN_RE = /\.(md|markdown)$/i;
+
 let current = { path: null, name: null };
 let source = '';
 let editing = false;
@@ -16,7 +19,15 @@ let editing = false;
 marked.setOptions({ gfm: true, breaks: false });
 
 function render(md) {
-  preview.innerHTML = DOMPurify.sanitize(marked.parse(md));
+  try {
+    preview.innerHTML = DOMPurify.sanitize(marked.parse(md || ''));
+  } catch (err) {
+    preview.innerHTML = '';
+    const box = document.createElement('pre');
+    box.className = 'render-error';
+    box.textContent = 'Gagal menampilkan markdown:\n' + (err && err.message ? err.message : String(err));
+    preview.appendChild(box);
+  }
 }
 
 function applyTheme(name) {
@@ -24,13 +35,23 @@ function applyTheme(name) {
   localStorage.setItem('mdv-theme', name);
 }
 
-let savedFileName = null;
+let flashTimer = null;
 function flash(msg) {
-  savedFileName = current.name;
-  fileName.textContent = `${current.name} · ${msg}`;
-  setTimeout(() => {
-    if (savedFileName === current.name) fileName.textContent = current.name;
-  }, 1500);
+  const name = current.name;
+  fileName.classList.remove('muted');
+  fileName.textContent = name ? `${name} · ${msg}` : msg;
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => {
+    if (current.name !== name) return;
+    fileName.textContent = name || 'Belum ada file';
+    fileName.classList.toggle('muted', !name);
+  }, 1600);
+}
+
+function setEditLabel(text) {
+  const label = btnEdit.querySelector('span');
+  if (label) label.textContent = text;
+  btnEdit.title = text === 'Edit' ? 'Edit (Ctrl+E)' : 'Kembali ke preview (Esc)';
 }
 
 function showPreview() {
@@ -38,18 +59,17 @@ function showPreview() {
   editor.hidden = true;
   preview.hidden = false;
   btnSave.hidden = true;
-  themeSel.disabled = false;
-  btnEdit.textContent = 'Edit';
+  setEditLabel('Edit');
 }
 
 function setEditing(on) {
   if (on) {
+    if (!current.path) return;
     editor.value = source;
     editor.hidden = false;
     preview.hidden = true;
     btnSave.hidden = false;
-    themeSel.disabled = true;
-    btnEdit.textContent = 'Preview';
+    setEditLabel('Preview');
     editor.focus();
   } else {
     source = editor.value;
@@ -61,12 +81,53 @@ function setEditing(on) {
 
 function loadFile({ path, name, content }) {
   current = { path, name };
-  source = content;
+  source = content || '';
   fileName.textContent = name;
+  fileName.classList.remove('muted');
   document.title = `${name} - MarkdownViewer`;
   getCurrentWindow().setTitle(`${name} - MarkdownViewer`).catch(() => {});
   showPreview();
   render(source);
+}
+
+function showEmpty() {
+  current = { path: null, name: null };
+  source = '';
+  preview.innerHTML = EMPTY_STATE;
+  preview.hidden = false;
+  fileName.textContent = 'Belum ada file';
+  fileName.classList.add('muted');
+  document.title = 'MarkdownViewer';
+  getCurrentWindow().setTitle('MarkdownViewer').catch(() => {});
+  showPreview();
+}
+
+async function openPath(path) {
+  try {
+    const file = await invoke('open_path', { path });
+    if (file) loadFile(file);
+    return true;
+  } catch (err) {
+    alert(String(err));
+    return false;
+  }
+}
+
+async function openFile() {
+  try {
+    const file = await invoke('open_file_dialog');
+    if (file) loadFile(file);
+  } catch (err) {
+    alert(String(err));
+  }
+}
+
+async function reload() {
+  if (!current.path) return openFile();
+  if (editing && editor.value !== source) {
+    if (!confirm('Perubahan belum disimpan. Muat ulang file dan buang perubahan?')) return;
+  }
+  await openPath(current.path);
 }
 
 async function save() {
@@ -81,20 +142,10 @@ async function save() {
   }
 }
 
-async function openFile() {
-  try {
-    const file = await invoke('open_file_dialog');
-    if (file) loadFile(file);
-  } catch (err) {
-    alert(String(err));
-  }
-}
-
 async function exportPNG() {
   if (!current.path) return flash('Buka file dulu');
-  const base = current.name.replace(/\.(md|markdown)$/i, '');
-  const wasEditing = editing;
-  if (wasEditing) setEditing(false);
+  const base = current.name.replace(MARKDOWN_RE, '');
+  if (editing) setEditing(false);
   try {
     const bg = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#ffffff';
     const dataUrl = await htmlToImage.toPng(preview, { backgroundColor: bg, pixelRatio: 2 });
@@ -107,27 +158,53 @@ async function exportPNG() {
 }
 
 document.getElementById('btnOpen').addEventListener('click', openFile);
-btnEdit.addEventListener('click', () => current.path && setEditing(!editing));
+btnEdit.addEventListener('click', () => setEditing(!editing));
 btnSave.addEventListener('click', save);
 themeSel.addEventListener('change', () => applyTheme(themeSel.value));
 
 document.getElementById('btnPDF').addEventListener('click', () => {
   if (!current.path) return flash('Buka file dulu');
-  document.title = current.name.replace(/\.(md|markdown)$/i, '');
+  document.title = current.name.replace(MARKDOWN_RE, '');
   window.print();
 });
 
 document.getElementById('btnPNG').addEventListener('click', exportPNG);
 
 document.addEventListener('keydown', (e) => {
-  if (!(e.ctrlKey || e.metaKey)) return;
+  const mod = e.ctrlKey || e.metaKey;
+  if (e.key === 'Escape' && editing) { e.preventDefault(); setEditing(false); return; }
+  if (!mod) return;
   if (e.key === 'o') { e.preventDefault(); openFile(); }
-  if (e.key === 's') { e.preventDefault(); if (editing) save(); }
-  if (e.key === 'e') { e.preventDefault(); if (current.path) setEditing(!editing); }
+  if (e.key === 's') { e.preventDefault(); save(); }
+  if (e.key === 'e') { e.preventDefault(); setEditing(!editing); }
+  if (e.key === 'r') { e.preventDefault(); reload(); }
+});
+
+// Cegah webview pindah halaman saat link diklik.
+preview.addEventListener('click', (e) => {
+  const link = e.target.closest && e.target.closest('a');
+  if (!link) return;
+  const href = link.getAttribute('href') || '';
+  if (href.startsWith('#')) return;
+  e.preventDefault();
 });
 
 listen('file:loaded', (e) => loadFile(e.payload));
 listen('file:error', (e) => alert(e.payload));
 
-applyTheme(localStorage.getItem('mdv-theme') || 'system');
+// File dari argumen CLI / second instance bisa datang sebelum listener siap.
+invoke('take_pending_file')
+  .then((file) => { if (file) loadFile(file); })
+  .catch(() => {});
+
+// Drag & drop file .md ke jendela.
+listen('tauri://drag-drop', (e) => {
+  const paths = (e.payload && e.payload.paths) || [];
+  const md = paths.find((p) => MARKDOWN_RE.test(p));
+  if (md) openPath(md);
+});
+
+const savedTheme = localStorage.getItem('mdv-theme');
+const knownTheme = Array.from(themeSel.options).some((o) => o.value === savedTheme);
+applyTheme(knownTheme ? savedTheme : 'system');
 themeSel.value = document.body.dataset.theme;

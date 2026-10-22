@@ -10,26 +10,93 @@
 <body data-theme="system">
   <header class="toolbar">
     <div class="title">
-      <span class="icon">📄</span>
-      <span id="fileName">Belum ada file</span>
+      <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 3v5h5"/>
+      </svg>
+      <span id="fileName" class="muted">Belum ada file</span>
     </div>
+
     <div class="actions">
-      <button id="btnOpen" title="Buka file (Ctrl+O)">Buka</button>
-      <select id="theme" title="Tema preview">
-        <option value="system">System</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="github-light">GitHub Light</option>
-        <option value="github-dark">GitHub Dark</option>
-      </select>
-      <button id="btnEdit" title="Edit (Ctrl+E)">Edit</button>
-      <button id="btnSave" title="Simpan (Ctrl+S)" hidden>Simpan</button>
-      <button id="btnPDF" title="Export PDF">PDF</button>
-      <button id="btnPNG" title="Export PNG">PNG</button>
+      <button id="btnOpen" title="Buka file (Ctrl+O)" aria-label="Buka file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </svg>
+        <span>Buka</span>
+      </button>
+
+      <div class="select">
+        <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="9" cy="9.5" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="15" cy="9.5" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="9.5" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+        <select id="theme" title="Tema preview" aria-label="Tema preview">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="github-light">GitHub Light</option>
+          <option value="github-dark">GitHub Dark</option>
+        </select>
+      </div>
+
+      <span class="sep" aria-hidden="true"></span>
+
+      <button id="btnEdit" title="Edit (Ctrl+E)" aria-label="Edit markdown">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 20h4l10-10a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/>
+          <path d="M13.5 6.5 17.5 10.5"/>
+        </svg>
+        <span>Edit</span>
+      </button>
+
+      <button id="btnSave" class="primary" title="Simpan (Ctrl+S)" aria-label="Simpan perubahan" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 4h11l3 3v13H5z"/>
+          <path d="M8 4v5h7V4"/>
+          <path d="M8 20v-6h8v6"/>
+        </svg>
+        <span>Simpan</span>
+      </button>
+
+      <span class="sep" aria-hidden="true"></span>
+
+      <button id="btnPDF" title="Export PDF" aria-label="Export PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 3v5h5"/>
+          <path d="M9 13h6M9 17h4"/>
+        </svg>
+        <span>PDF</span>
+      </button>
+
+      <button id="btnPNG" title="Export PNG" aria-label="Export PNG">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="16" rx="2"/>
+          <circle cx="8.5" cy="9.5" r="1.5"/>
+          <path d="m5 18 5-5 4 4 2-2 3 3"/>
+        </svg>
+        <span>PNG</span>
+      </button>
     </div>
   </header>
+
   <main>
-    <article id="preview" class="markdown-body"></article>
+    <article id="preview" class="markdown-body">
+      <div class="empty">
+        <p><strong>Belum ada file</strong></p>
+        <p>Klik <strong>Buka</strong> atau tekan <kbd>Ctrl</kbd> + <kbd>O</kbd> untuk membuka file Markdown.</p>
+        <p>File juga bisa di-drag &amp; drop ke jendela ini.</p>
+      </div>
+    </article>
     <textarea id="editor" spellcheck="false" hidden></textarea>
   </main>
   <script src="vendor/marked.umd.js"></script>

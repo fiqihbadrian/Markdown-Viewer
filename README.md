@@ -64,6 +64,31 @@ xcodebuild -project MarkdownViewer.xcodeproj -scheme MarkdownViewer -configurati
 
 The built app will be in `~/Library/Developer/Xcode/DerivedData/MarkdownViewer-*/Build/Products/Release/MarkdownViewer.app`
 
+### Linux & Windows (Tauri)
+
+The `windows/` folder contains the cross-platform build (Tauri 2) used for Windows and Linux.
+
+Linux packages (`.deb`, `.AppImage`) are on the [Releases](https://github.com/fiqihbadrian/Markdown-Viewer/releases) page.
+
+```bash
+# Debian/Ubuntu
+sudo apt install ./MarkdownViewer_<version>_amd64.deb
+
+# AppImage
+chmod +x MarkdownViewer_<version>_amd64.AppImage
+./MarkdownViewer_<version>_amd64.AppImage
+```
+
+Runtime dependency: `libwebkit2gtk-4.1-0` (Debian 13+, Ubuntu 24.04+) and `libgtk-3-0`.
+
+Build from source:
+
+```bash
+cd windows
+npm ci
+npm run tauri build   # needs Rust, libwebkit2gtk-4.1-dev, libgtk-3-dev, build-essential
+```
+
 ## 🚀 Usage
 
 ### Opening Files

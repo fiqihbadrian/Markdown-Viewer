@@ -58,4 +58,7 @@ jobs:
           releaseName: ${{ github.ref_type == 'tag' && format('MarkdownViewer {0}', github.ref_name) || '' }}
           releaseDraft: false
           prerelease: false
+          # Saat dijalankan manual (workflow_dispatch) tidak ada tagName, jadi
+          # bundel diunggah sebagai artifact supaya bisa ditempel ke release.
+          uploadWorkflowArtifacts: ${{ github.ref_type != 'tag' }}
           args: ${{ matrix.args }}
